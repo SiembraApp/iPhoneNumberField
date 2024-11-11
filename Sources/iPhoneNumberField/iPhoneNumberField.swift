@@ -133,15 +133,17 @@ public struct iPhoneNumberField: UIViewRepresentable {
     /// Whether the phone number field is enabled for interaction. ✅
     internal var isUserInteractionEnabled = true
 
-    public init(countryCode: Binding<String?>, _ title: String? = nil,
+    public init(countryCode: Binding<String?>,
+                _ title: String? = nil,
                 text: Binding<String>,
                 isEditing: Binding<Bool>? = nil,
                 formatted: Bool = true,
-                configuration: @escaping (UIViewType) -> () = { _ in } ) {
+                configuration: @escaping (UIViewType) -> () = { _ in }) {
 
         self.placeholder = title
         self.externalIsFirstResponder = isEditing
         self.formatted = formatted
+        self._countryCode = countryCode // Ensure this line is here
         self._text = text
         self._displayedText = State(initialValue: text.wrappedValue)
         self.configuration = configuration
@@ -226,17 +228,18 @@ public struct iPhoneNumberField: UIViewRepresentable {
 
     public class Coordinator: NSObject, UITextFieldDelegate {
         internal init(countryCode: Binding<String?>,
-            text: Binding<String>,
-            displayedText: Binding<String>,
-            isFirstResponder: Binding<Bool>,
-            formatted: Bool,
-            onBeginEditing: @escaping (PhoneNumberTextField) -> () = { (view: PhoneNumberTextField) in },
-            onEditingChange: @escaping (PhoneNumberTextField) -> () = { (view: PhoneNumberTextField) in },
-            onPhoneNumberChange: @escaping (PhoneNumber?) -> () = { (view: PhoneNumber?) in },
-            onEndEditing: @escaping (PhoneNumberTextField) -> () = { (view: PhoneNumberTextField) in },
-            onClear: @escaping (PhoneNumberTextField) -> () = { (view: PhoneNumberTextField) in },
-            onReturn: @escaping (PhoneNumberTextField) -> () = { (view: PhoneNumberTextField) in } )
-        {
+                      text: Binding<String>,
+                      displayedText: Binding<String>,
+                      isFirstResponder: Binding<Bool>,
+                      formatted: Bool,
+                      onBeginEditing: @escaping (PhoneNumberTextField) -> () = { _ in },
+                      onEditingChange: @escaping (PhoneNumberTextField) -> () = { _ in },
+                      onPhoneNumberChange: @escaping (PhoneNumber?) -> () = { _ in },
+                      onEndEditing: @escaping (PhoneNumberTextField) -> () = { _ in },
+                      onClear: @escaping (PhoneNumberTextField) -> () = { _ in },
+                      onReturn: @escaping (PhoneNumberTextField) -> () = { _ in }) {
+
+            self._countryCode = countryCode // Ensure this binding is set
             self.text = text
             self.displayedText = displayedText
             self.isFirstResponder = isFirstResponder
@@ -275,12 +278,12 @@ public struct iPhoneNumberField: UIViewRepresentable {
                     text.wrappedValue = textField.text ?? ""
                 } else {
                     if let number = textField.phoneNumber {
-                        // If we have a valid number, update the binding
                         let country = String(number.countryCode)
+                        countryCode.wrappedValue = country // Update the country code binding
                         let nationalNumber = String(number.nationalNumber)
                         text.wrappedValue = "+" + country + nationalNumber
                     } else {
-                        // Otherwise, maintain an empty string
+                        countryCode.wrappedValue = nil // Clear if invalid
                         text.wrappedValue = ""
                     }
                 }
