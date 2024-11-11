@@ -210,6 +210,7 @@ public struct iPhoneNumberField: UIViewRepresentable {
 
     public func makeCoordinator() -> Coordinator {
         Coordinator(
+            countryCode: $countryCode, // Add this line
             text: $text,
             displayedText: $displayedText,
             isFirstResponder: externalIsFirstResponder ?? $internalIsFirstResponder,
@@ -220,7 +221,6 @@ public struct iPhoneNumberField: UIViewRepresentable {
             onEndEditing: onEndEditingHandler,
             onClear: onClearHandler,
             onReturn: onReturnHandler,
-            countryCode: $countryCode // Add this line
         )
     }
 
