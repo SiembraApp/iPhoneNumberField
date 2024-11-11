@@ -211,15 +211,17 @@ public struct iPhoneNumberField: UIViewRepresentable {
     public func makeCoordinator() -> Coordinator {
         Coordinator(
             text: $text,
-                    displayedText: $displayedText,
-                    isFirstResponder: externalIsFirstResponder ?? $internalIsFirstResponder,
-                    formatted: formatted,
-                    onBeginEditing: onBeginEditingHandler,
-                    onEditingChange: onEditingChangeHandler,
-                    onPhoneNumberChange: onPhoneNumberChangeHandler,
-                    onEndEditing: onEndEditingHandler,
-                    onClear: onClearHandler,
-                    onReturn: onReturnHandler)
+            displayedText: $displayedText,
+            isFirstResponder: externalIsFirstResponder ?? $internalIsFirstResponder,
+            formatted: formatted,
+            onBeginEditing: onBeginEditingHandler,
+            onEditingChange: onEditingChangeHandler,
+            onPhoneNumberChange: onPhoneNumberChangeHandler,
+            onEndEditing: onEndEditingHandler,
+            onClear: onClearHandler,
+            onReturn: onReturnHandler,
+            countryCode: $countryCode // Add this line
+        )
     }
 
     public class Coordinator: NSObject, UITextFieldDelegate {
