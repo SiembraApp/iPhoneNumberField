@@ -222,7 +222,7 @@ public struct iPhoneNumberField: UIViewRepresentable {
             onPhoneNumberChange: onPhoneNumberChangeHandler,
             onEndEditing: onEndEditingHandler,
             onClear: onClearHandler,
-            onReturn: onReturnHandler,
+            onReturn: onReturnHandler
         )
     }
 
@@ -239,7 +239,7 @@ public struct iPhoneNumberField: UIViewRepresentable {
                       onClear: @escaping (PhoneNumberTextField) -> () = { _ in },
                       onReturn: @escaping (PhoneNumberTextField) -> () = { _ in }) {
 
-            self._countryCode = countryCode // Ensure this binding is set
+            self.countryCode = countryCode // Ensure this binding is set
             self.text = text
             self.displayedText = displayedText
             self.isFirstResponder = isFirstResponder
@@ -251,7 +251,7 @@ public struct iPhoneNumberField: UIViewRepresentable {
             self.onClear = onClear
             self.onReturn = onReturn
         }
-
+        var countryCode: Binding<String?>
         var text: Binding<String>
         var displayedText: Binding<String>
         var isFirstResponder: Binding<Bool>
