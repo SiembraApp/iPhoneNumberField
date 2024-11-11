@@ -19,6 +19,7 @@ public struct iPhoneNumberField: UIViewRepresentable {
     /// The formatted phone number `String`.
     /// This variable writes to the binding provided in the initializer.
     @Binding public var text: String
+    @Binding public var countryCode: String?
     @State private var displayedText: String
     
     /// Whether or not the phone number field is editing.
@@ -132,7 +133,7 @@ public struct iPhoneNumberField: UIViewRepresentable {
     /// Whether the phone number field is enabled for interaction. ✅
     internal var isUserInteractionEnabled = true
 
-    public init(_ title: String? = nil,
+    public init(countryCode: Binding<String?>, _ title: String? = nil,
                 text: Binding<String>,
                 isEditing: Binding<Bool>? = nil,
                 formatted: Bool = true,
@@ -222,7 +223,7 @@ public struct iPhoneNumberField: UIViewRepresentable {
     }
 
     public class Coordinator: NSObject, UITextFieldDelegate {
-        internal init(
+        internal init(countryCode: Binding<String?>,
             text: Binding<String>,
             displayedText: Binding<String>,
             isFirstResponder: Binding<Bool>,
